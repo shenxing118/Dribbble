@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="shot"
+            type="com.shen.dribbble.data.Shot" />
+        <variable
+            name="presenter"
+            type="com.shen.dribbble.shots.ShotsContract.Presenter"/>
+    </data>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="@{(theview) -> presenter.onShotItemClick(shot,theview)}">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/shotDraw"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:transitionName="shotImage"
+                fresco:placeholderImage="@drawable/placeholder"
+                fresco:viewAspectRatio="1.33"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/gif_round_corner"
+                android:textColor="#55E6E6E6"
+                android:text="GIF"
+                android:textSize="12sp"
+                android:paddingRight="5dp"
+                android:paddingLeft="5dp"
+                android:textStyle="bold"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="6dp"
+                android:layout_marginRight="8dp"
+                android:visibility='@{shot.images.normal.endsWith(".gif") ? View.VISIBLE : View.GONE}'/>
+
+            <TextView
+                android:id="@+id/title"
+                android:textSize="14sp"
+                android:text="@{shot.title}"
+                android:layout_marginLeft="10dp"
+                android:maxLines="1"
+                android:textColor="@color/black"
+                android:layout_marginTop="10dp"
+                android:layout_below="@id/shotDraw"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:id="@+id/userInfoLL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/title"
+                android:gravity="center_vertical">
+
+                <com.facebook.drawee.view.SimpleDraweeView
+                    android:id="@+id/avatarImage"
+                    fresco:roundAsCircle="true"
+                    android:layout_margin="10dp"
+                    android:transitionName="avatarImage"
+                    fresco:placeholderImage="@drawable/person_image_empty"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:onClick="@{(view) -> presenter.onAvatarClick(shot.user,view)}"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:textSize="12dp"
+                    android:lines="1"
+                    android:text="@{shot.user.name}" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_below="@id/userInfoLL">
+
+                <TextView
+                    android:id="@+id/viewsCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@mipmap/ic_shot_views_small"
+                    android:inputType="number"
+                    android:textSize="12dp"
+                    android:layout_marginLeft="2dp"
+                    android:text="@{shot.viewsCount.toString()}" />
+
+                <TextView
+                    android:id="@+id/commentsCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@mipmap/ic_shot_comment_small"
+                    android:inputType="number"
+                    android:textSize="12dp"
+                    android:layout_marginLeft="2dp"
+                    android:text="@{shot.commentsCount.toString()}" />
+
+                <TextView
+                    android:id="@+id/likesCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@mipmap/ic_shot_liked_small"
+                    android:inputType="number"
+                    android:textSize="12sp"
+                    android:layout_marginLeft="2dp"
+                    android:text="@{shot.likesCount.toString()}" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+</layout>

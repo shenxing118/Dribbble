@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto">
+    
+    <data>
+        <import type="android.text.format.DateUtils" />
+        <import type="java.lang.System" />
+        <variable
+            name="like"
+            type="com.shen.dribbble.data.Like"/>
+
+        <variable
+            name="presenter"
+            type="com.shen.dribbble.likes.LikesContract.Presenter"/>
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:onClick="@{(view) -> presenter.onItemClick(view,like.user)}">
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/avatarImage"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="10dp"
+            fresco:placeholderImage="@drawable/person_image_empty"
+            fresco:roundAsCircle="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/avatarImage"
+            android:textColor="@color/black"
+            android:text="@{like.user.name}"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:text="@{DateUtils.getRelativeTimeSpanString(like.createdAt.time,System.currentTimeMillis(),DateUtils.MINUTE_IN_MILLIS, DateUtils.FORMAT_ABBREV_RELATIVE)}" />
+
+    </RelativeLayout>
+</layout>
