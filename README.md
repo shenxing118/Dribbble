@@ -13,6 +13,12 @@ retrofit + okhttp
 
 fresco
 
-<img src="https://github.com/shenxing118/Dribbble/blob/master/app/src/main/res/drawable/Screenshot_20160809-141551.png" width="50%" height="50%">
-<img src="https://github.com/shenxing118/Dribbble/blob/master/app/src/main/res/drawable/Screenshot_20160809-141551.png" width="50%" height="50%">
-<img src="https://github.com/shenxing118/Dribbble/blob/master/app/src/main/res/drawable/Screenshot_20160809-141551.png" width="50%" height="50%">
+<img src="https://github.com/shenxing118/Dribbble/blob/master/app/src/main/res/drawable/Screenshot_20160809-141551.png" width="30%" height="30%">
+
+<img src="https://github.com/shenxing118/Dribbble/blob/master/app/src/main/res/drawable/Screenshot_20160809-141752.png" width="30%" height="30%">
+
+<img src="https://github.com/shenxing118/Dribbble/blob/master/app/src/main/res/drawable/Screenshot_20160809-141616.png" width="30%" height="30%">
+
+<img src="https://github.com/shenxing118/Dribbble/blob/master/app/src/main/res/drawable/Screenshot_20160809-141803.png" width="30%" height="30%">
+
+<img src="https://github.com/shenxing118/Dribbble/blob/master/app/src/main/res/drawable/Screenshot_20160809-141844.png" width="30%" height="30%">
