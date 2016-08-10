@@ -1,6 +1,7 @@
-package com.shen.dribbble.likes;
+package com.shen.dribbble.buckets;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,10 +17,11 @@ import com.shen.dribbble.BaseActivity;
 import com.shen.dribbble.BasePresenter;
 import com.shen.dribbble.INI;
 import com.shen.dribbble.R;
-import com.shen.dribbble.data.Like;
+import com.shen.dribbble.bucketdetail.BucketDetailActivity;
+import com.shen.dribbble.data.Bucket;
 import com.shen.dribbble.data.User;
 import com.shen.dribbble.data.source.ShotsRemoteDataSource;
-import com.shen.dribbble.databinding.LikeItemBinding;
+import com.shen.dribbble.databinding.BucketItemBinding;
 import com.shen.dribbble.utils.BaseRecyclerViewAdapter;
 import com.shen.dribbble.utils.BaseViewHolder;
 import com.shen.dribbble.utils.UIUtils;
@@ -30,18 +32,18 @@ import java.util.List;
 /**
  * Created by shen on 2016/8/6.
  */
-public class LikesActivity extends BaseActivity implements LikesContract.View{
+public class BucketsActivity extends BaseActivity implements BucketsContract.View {
 
-    LikeAdapter likeAdapter;
+    private BucketsAdapter bucketsAdapter;
 
-    int page = 1;
+    private int page = 1;
 
-    LikesContract.Presenter likesPresenter;
+    private BucketsContract.Presenter bucketsPresenter;
 
-    RecyclerView recyclerView;
+    private RecyclerView recyclerView;
+    private SwipeRefreshLayout swipeRefreshL;
 
     private int shotId;
-    private SwipeRefreshLayout swipeRefreshL;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,27 +51,26 @@ public class LikesActivity extends BaseActivity implements LikesContract.View{
         setContentView(R.layout.recyclerview_act);
 
         setStatusBarColor();
-        setToolBar("Likes",true);
+        setToolBar("Buckets", true);
 
-        shotId = getIntent().getIntExtra("shotId",0);
-
-        likesPresenter = new LikesPresenter(this,ShotsRemoteDataSource.getInstance());
+        shotId = getIntent().getIntExtra("shotId", 0);
+        bucketsPresenter = new BucketsPresenter(this, ShotsRemoteDataSource.getInstance());
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        likeAdapter = new LikeAdapter(this,new ArrayList<Like>(0),R.layout.like_item,likesPresenter);
+        bucketsAdapter = new BucketsAdapter(this, new ArrayList<Bucket>(0), R.layout.bucket_item, bucketsPresenter);
 
-        View footerView = LayoutInflater.from(this).inflate(R.layout.load_more_footer,recyclerView,false);
-        likeAdapter.setFooterView(footerView);
-        recyclerView.setAdapter(likeAdapter);
+        View footerView = LayoutInflater.from(this).inflate(R.layout.load_more_footer, recyclerView, false);
+        bucketsAdapter.setFooterView(footerView);
+        recyclerView.setAdapter(bucketsAdapter);
         recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             int lastVisibleItem;
 
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if (newState == RecyclerView.SCROLL_STATE_IDLE && likeAdapter.getItemCount() == lastVisibleItem + 1) {
-                    getLikes();
+                if (newState == RecyclerView.SCROLL_STATE_IDLE && bucketsAdapter.getItemCount() == lastVisibleItem + 1) {
+                    getBuckets();
                 }
             }
 
@@ -80,7 +81,8 @@ public class LikesActivity extends BaseActivity implements LikesContract.View{
                 lastVisibleItem = layoutManager.findLastVisibleItemPosition();
             }
         });
-        getLikes();
+
+        getBuckets();
 
         swipeRefreshL = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshL);
         swipeRefreshL.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -88,50 +90,58 @@ public class LikesActivity extends BaseActivity implements LikesContract.View{
             @Override
             public void onRefresh() {
                 page = 1;
-                getLikes();
+                getBuckets();
             }
         });
+
     }
 
-    private void getLikes(){
-        likesPresenter.loadLikes(shotId,page);
+    private void getBuckets() {
+        bucketsPresenter.loadBuckets(shotId, page);
     }
 
     @Override
-    public void showLikes(List<Like> likes) {
-        if (likes.size() < INI.PAGE_SIZE){
-            likeAdapter.removeFooter();
+    public void showBuckets(List<Bucket> buckets) {
+        if (buckets.size() < INI.PAGE_SIZE) {
+            bucketsAdapter.removeFooter();
             recyclerView.setOnScrollListener(null);
         }
-        if (page == 1){
-            likeAdapter.setDatas(likes);
+        if (page == 1) {
+            bucketsAdapter.setDatas(buckets);
             swipeRefreshL.setRefreshing(false);
-        }else{
-            likeAdapter.addDatas(likes);
+        } else {
+            bucketsAdapter.addDatas(buckets);
         }
         page++;
     }
 
     @Override
     public void showUser(View view, User user) {
-        SimpleDraweeView draweeView = (SimpleDraweeView) view.findViewById(R.id.avatarImage);
-        UIUtils.openUserActivity(this,user,draweeView);
+        UIUtils.openUserActivity(this, user, (SimpleDraweeView) view);
     }
 
-    private static class LikeAdapter extends BaseRecyclerViewAdapter<Like>{
+    @Override
+    public void showBucketDetail(View view, Bucket bucket) {
+        Intent intent = new Intent(this, BucketDetailActivity.class);
+        intent.putExtra("bucket",bucket);
+        startActivity(intent);
+    }
 
-        public LikeAdapter(Context context, List<Like> mDatas, int resourceId, BasePresenter presenter) {
+    private static class BucketsAdapter extends BaseRecyclerViewAdapter<Bucket> {
+
+        public BucketsAdapter(Context context, List<Bucket> mDatas, int resourceId, BasePresenter presenter) {
             super(context, mDatas, resourceId, presenter);
         }
 
         @Override
         public void bindView(BaseViewHolder holder, int position) {
-            final Like like = mDatas.get(position);
-            final LikeItemBinding binding= (LikeItemBinding) holder.binding;
-            binding.avatarImage.setImageURI(Uri.parse(like.getUser().getAvatarUrl()));
-            binding.setVariable(BR.like,like);
+            final Bucket bucket = mDatas.get(position);
+            final BucketItemBinding binding = (BucketItemBinding) holder.binding;
+            binding.avatarImage.setImageURI(Uri.parse(bucket.getUser().getAvatarUrl()));
+            binding.setVariable(BR.bucket, bucket);
             binding.setVariable(BR.presenter,presenter);
             binding.executePendingBindings();
         }
     }
+
 }

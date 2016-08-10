@@ -1,23 +1,19 @@
 package com.shen.dribbble.user;
 
-import android.app.Activity;
+import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Rect;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.SharedElementCallback;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.transition.Transition;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.shen.dribbble.BR;
@@ -29,7 +25,6 @@ import com.shen.dribbble.data.User;
 import com.shen.dribbble.data.source.ShotsRemoteDataSource;
 import com.shen.dribbble.databinding.UserHeaderBinding;
 import com.shen.dribbble.databinding.UserShotItemBinding;
-import com.shen.dribbble.shotdetail.ShotDetailActivity;
 import com.shen.dribbble.utils.BaseRecyclerViewAdapter;
 import com.shen.dribbble.utils.BaseViewHolder;
 import com.shen.dribbble.utils.CommonTools;
@@ -61,7 +56,7 @@ public class UserActivity extends BaseActivity implements UserContract.View {
         super.onCreate(savedInstanceState);
         DataBindingUtil.setContentView(this, R.layout.user_act);
 
-        postponeEnterTransition();
+//        postponeEnterTransition();
 
         user = getIntent().getParcelableExtra("user");
 
@@ -94,6 +89,35 @@ public class UserActivity extends BaseActivity implements UserContract.View {
         imageAdapter.setFooterView(footerView);
         recyclerView.setAdapter(imageAdapter);
 
+        loadDataAfterTransition(headerBinding);
+//        startPostponedEnterTransition();
+
+        recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            int lastVisibleItem;
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == RecyclerView.SCROLL_STATE_IDLE && imageAdapter.getItemCount() == lastVisibleItem + 1) {
+                    getShotImage();
+                }
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                GridLayoutManager layoutManager = (GridLayoutManager) recyclerView.getLayoutManager();
+                lastVisibleItem = layoutManager.findLastVisibleItemPosition();
+            }
+        });
+    }
+
+    /**
+     * 头像共享元素动画结束后再加载数据，否则如果数据加载过快，将无法显示动画
+     * @param headerBinding
+     */
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void loadDataAfterTransition(final UserHeaderBinding headerBinding) {
         getWindow().getSharedElementEnterTransition().addListener(new Transition.TransitionListener() {
             @Override
             public void onTransitionStart(Transition transition) {
@@ -126,26 +150,6 @@ public class UserActivity extends BaseActivity implements UserContract.View {
             public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
                 sharedElements.put("avatarImage", headerBinding.avatarImage);
                 super.onMapSharedElements(names, sharedElements);
-            }
-        });
-        startPostponedEnterTransition();
-
-        recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
-            int lastVisibleItem;
-
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                if (newState == RecyclerView.SCROLL_STATE_IDLE && imageAdapter.getItemCount() == lastVisibleItem + 1) {
-                    getShotImage();
-                }
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                GridLayoutManager layoutManager = (GridLayoutManager) recyclerView.getLayoutManager();
-                lastVisibleItem = layoutManager.findLastVisibleItemPosition();
             }
         });
     }

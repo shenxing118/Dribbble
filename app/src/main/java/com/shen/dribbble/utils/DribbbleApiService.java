@@ -1,5 +1,6 @@
 package com.shen.dribbble.utils;
 
+import com.shen.dribbble.data.Bucket;
 import com.shen.dribbble.data.Comment;
 import com.shen.dribbble.data.Like;
 import com.shen.dribbble.data.Shot;
@@ -32,5 +33,11 @@ public interface DribbbleApiService {
 
     @GET("shots/{shotId}/comments")
     Observable<List<Comment>> getShotComments(@Path("shotId") int shotId, @Query("page") int page);
+
+    @GET("shots/{shotId}/buckets")
+    Observable<List<Bucket>> getShotBuckets(@Path("shotId") int shotId, @Query("page") int page);
+
+    @GET("buckets/{bucketId}/shots")
+    Observable<List<Shot>> getBucketShots(@Path("bucketId") int bucketId, @Query("page") int page);
 
 }

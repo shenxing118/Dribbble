@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="bucket"
+            type="com.shen.dribbble.data.Bucket" />
+
+        <variable
+            name="presenter"
+            type="com.shen.dribbble.buckets.BucketsContract.Presenter" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="@{(view) -> presenter.onBucketItemClick(view,bucket)}">
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/avatarImage"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="10dp"
+            android:onClick="@{(view) -> presenter.onAvatarClick(view,bucket.user)}"
+            fresco:placeholderImage="@drawable/person_image_empty"
+            fresco:roundAsCircle="true" />
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@id/avatarImage"
+            android:text="@{bucket.name}"
+            android:textSize="16sp"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/name"
+            android:layout_marginRight="10dp"
+            android:layout_toRightOf="@id/avatarImage"
+            android:text='@{"curated by " + bucket.user.name}'/>
+
+        <TextView
+            android:id="@+id/shotsCount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/username"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_toRightOf="@id/avatarImage"
+            android:text='@{bucket.shotsCount + " shots"}'/>
+    </RelativeLayout>
+</layout>

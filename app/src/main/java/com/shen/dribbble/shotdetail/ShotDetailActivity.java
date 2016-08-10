@@ -9,6 +9,7 @@ import android.support.design.widget.AppBarLayout;
 import android.text.Html;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
+import android.view.View;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.drawable.ProgressBarDrawable;
@@ -19,11 +20,14 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.shen.dribbble.BaseActivity;
 import com.shen.dribbble.R;
+import com.shen.dribbble.buckets.BucketsActivity;
 import com.shen.dribbble.comments.CommentsActivity;
 import com.shen.dribbble.data.Shot;
+import com.shen.dribbble.data.User;
 import com.shen.dribbble.databinding.ShotdetailActBinding;
 import com.shen.dribbble.likes.LikesActivity;
 import com.shen.dribbble.utils.CommonTools;
+import com.shen.dribbble.utils.UIUtils;
 
 /**
  * Created by shen on 2016/7/27.
@@ -103,6 +107,18 @@ public class ShotDetailActivity extends BaseActivity implements ShotDetailContra
         Intent intent = new Intent(this, CommentsActivity.class);
         intent.putExtra("shotId", shotId);
         startActivity(intent);
+    }
+
+    @Override
+    public void showBuckets(int shotId) {
+        Intent intent = new Intent(this, BucketsActivity.class);
+        intent.putExtra("shotId", shotId);
+        startActivity(intent);
+    }
+
+    @Override
+    public void showUserUI(User user,View view) {
+        UIUtils.openUserActivity(this,user,(SimpleDraweeView) view);
     }
 
 }

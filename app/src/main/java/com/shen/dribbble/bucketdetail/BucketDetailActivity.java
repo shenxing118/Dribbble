@@ -1,7 +1,6 @@
-package com.shen.dribbble.shots;
+package com.shen.dribbble.bucketdetail;
 
-import android.content.Context;
-import android.graphics.Rect;
+import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -13,54 +12,66 @@ import android.view.View;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.shen.dribbble.BR;
 import com.shen.dribbble.BaseActivity;
-import com.shen.dribbble.BasePresenter;
 import com.shen.dribbble.INI;
 import com.shen.dribbble.R;
+import com.shen.dribbble.data.Bucket;
 import com.shen.dribbble.data.Shot;
 import com.shen.dribbble.data.User;
 import com.shen.dribbble.data.source.ShotsRemoteDataSource;
-import com.shen.dribbble.databinding.ShotItemBinding;
-import com.shen.dribbble.utils.BaseRecyclerViewAdapter;
-import com.shen.dribbble.utils.BaseViewHolder;
+import com.shen.dribbble.databinding.BucketHeaderBinding;
+import com.shen.dribbble.shots.ShotsActivity;
 import com.shen.dribbble.utils.CommonTools;
 import com.shen.dribbble.utils.UIUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShotsActivity extends BaseActivity implements ShotsContract.View {
+public class BucketDetailActivity extends BaseActivity implements BucketDetailContract.View {
 
-    private ShotsAdapter shotsAdapter;
+    private ShotsActivity.ShotsAdapter shotsAdapter;
 
     private SwipeRefreshLayout swipeRefreshL;
 
     private int page = 1;
 
-    private ShotsContract.Presenter shotsPresenter;
+    private BucketDetailContract.Presenter bucketsPresenter;
+
+    private Bucket bucket;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.shots_act);
 
-        shotsPresenter = new ShotsPresenter(ShotsRemoteDataSource.getInstance(), this);
+        bucket = getIntent().getParcelableExtra("bucket");
+        bucketsPresenter = new BucketDetailPresenter(ShotsRemoteDataSource.getInstance(), this);
 
         setStatusBarColor();
-        setToolBar("Dribbble", false);
+        setToolBar("BucketDetail", true);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.shots_list);
 
-        shotsAdapter = new ShotsAdapter(this, new ArrayList<Shot>(0), R.layout.shot_item, shotsPresenter);
+        shotsAdapter = new ShotsActivity.ShotsAdapter(this, new ArrayList<Shot>(0), R.layout.shot_item, bucketsPresenter);
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
         layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
-                return shotsAdapter.hasFooter() && position == shotsAdapter.getItemCount() - 1 ? 2 : 1;
+                return (shotsAdapter.hasFooter() && position == shotsAdapter.getItemCount() - 1)
+                        || (shotsAdapter.hasHeader() && position == 0) ? 2 : 1;
             }
         });
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.addItemDecoration(new SpaceItemDecoration(CommonTools.dip2px(this, 10)));
+        recyclerView.addItemDecoration(new ShotsActivity.SpaceItemDecoration(CommonTools.dip2px(this, 10)));
+
+        View headerView = LayoutInflater.from(this).inflate(R.layout.bucket_header,recyclerView,false);
+        BucketHeaderBinding binding = DataBindingUtil.bind(headerView);
+        binding.avatarImage.setImageURI(Uri.parse(bucket.getUser().getAvatarUrl()));
+        binding.setVariable(BR.bucket,bucket);
+        binding.executePendingBindings();
+
         View footerView = LayoutInflater.from(this).inflate(R.layout.load_more_footer, recyclerView, false);
+
+        shotsAdapter.setHeaderView(headerView);
         shotsAdapter.setFooterView(footerView);
         recyclerView.setAdapter(shotsAdapter);
         recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -70,7 +81,7 @@ public class ShotsActivity extends BaseActivity implements ShotsContract.View {
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (newState == RecyclerView.SCROLL_STATE_IDLE && shotsAdapter.getItemCount() == lastVisibleItem + 1) {
-                    getShots();
+                    getBucketShots();
                 }
             }
 
@@ -88,19 +99,19 @@ public class ShotsActivity extends BaseActivity implements ShotsContract.View {
             @Override
             public void onRefresh() {
                 page = 1;
-                getShots();
+                getBucketShots();
             }
         });
 
-        getShots();
+        getBucketShots();
     }
 
-    private void getShots() {
-        shotsPresenter.loadShots(page);
+    private void getBucketShots() {
+        bucketsPresenter.loadBucketShots(bucket.getId(), page);
     }
 
     @Override
-    public void showShots(List<Shot> shots) {
+    public void showBucketShots(List<Shot> shots) {
         if (shots.size() < INI.PAGE_SIZE){
             shotsAdapter.removeFooter();
         }
@@ -121,41 +132,6 @@ public class ShotsActivity extends BaseActivity implements ShotsContract.View {
     @Override
     public void showUserDetail(User user, SimpleDraweeView draweeView) {
         UIUtils.openUserActivity(this, user, draweeView);
-    }
-
-    public static class ShotsAdapter extends BaseRecyclerViewAdapter<Shot> {
-
-
-        public ShotsAdapter(Context context, List<Shot> mDatas, int resourceId, BasePresenter presenter) {
-            super(context, mDatas, resourceId, presenter);
-        }
-
-        @Override
-        public void bindView(BaseViewHolder holder, int position) {
-            final Shot shot = hasHeader() ? mDatas.get(position - 1) : mDatas.get(position);
-            final ShotItemBinding binding = (ShotItemBinding) holder.binding;
-            binding.shotDraw.setImageURI(Uri.parse(shot.getImages().getNormal()));
-            binding.avatarImage.setImageURI(Uri.parse(shot.getUser().getAvatarUrl()));
-            binding.setVariable(BR.shot, shot);
-            binding.setVariable(BR.presenter, presenter);
-            binding.executePendingBindings();
-        }
-    }
-
-    public static class SpaceItemDecoration extends RecyclerView.ItemDecoration {
-
-        private int space;
-
-        public SpaceItemDecoration(int space) {
-            this.space = space;
-        }
-
-        @Override
-        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-
-            outRect.set(space, 0, 0, space);
-
-        }
     }
 
 

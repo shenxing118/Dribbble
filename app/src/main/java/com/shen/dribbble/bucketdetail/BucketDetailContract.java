@@ -1,20 +1,21 @@
-package com.shen.dribbble.shots;
+package com.shen.dribbble.bucketdetail;
 
 import com.shen.dribbble.data.Shot;
+import com.shen.dribbble.shots.ShotItemContract;
 
 import java.util.List;
 
 /**
  * Created by shen on 2016/8/2.
  */
-public interface ShotsContract {
+public interface BucketDetailContract {
 
     interface Presenter extends ShotItemContract.Presenter {
-        void loadShots(int page);
+        void loadBucketShots(int bucketId, int page);
     }
 
     interface View extends ShotItemContract.View {
-        void showShots(List<Shot> shots);
+        void showBucketShots(List<Shot> shots);
     }
 
 

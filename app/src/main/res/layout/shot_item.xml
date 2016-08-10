@@ -9,7 +9,7 @@
             type="com.shen.dribbble.data.Shot" />
         <variable
             name="presenter"
-            type="com.shen.dribbble.shots.ShotsContract.Presenter"/>
+            type="com.shen.dribbble.shots.ShotItemContract.Presenter"/>
     </data>
 
     <android.support.v7.widget.CardView

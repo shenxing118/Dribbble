@@ -46,14 +46,16 @@ public class CommentsActivity extends BaseActivity implements CommentsContract.V
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.comments_act);
+        setContentView(R.layout.recyclerview_act);
 
         setStatusBarColor();
         setToolBar("Comments", true);
 
         shotId = getIntent().getIntExtra("shotId", 0);
 
-        recyclerView = (RecyclerView) findViewById(R.id.comments_list);
+        commentsPresenter = new CommentsPresenter(this, ShotsRemoteDataSource.getInstance());
+
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         commentsAdapter = new CommentsAdapter(this, new ArrayList<Comment>(0), R.layout.comment_item,commentsPresenter);
 
@@ -78,8 +80,6 @@ public class CommentsActivity extends BaseActivity implements CommentsContract.V
                 lastVisibleItem = layoutManager.findLastVisibleItemPosition();
             }
         });
-
-        commentsPresenter = new CommentsPresenter(this, ShotsRemoteDataSource.getInstance());
 
         getComments();
 

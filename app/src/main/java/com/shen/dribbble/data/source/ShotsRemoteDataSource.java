@@ -1,5 +1,6 @@
 package com.shen.dribbble.data.source;
 
+import com.shen.dribbble.data.Bucket;
 import com.shen.dribbble.data.Comment;
 import com.shen.dribbble.data.Like;
 import com.shen.dribbble.data.Shot;
@@ -7,20 +8,17 @@ import com.shen.dribbble.utils.Netutils;
 
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import rx.Observable;
 
 /**
  * Created by shen on 2016/8/2.
  */
-public class ShotsRemoteDataSource implements ShotsDataSource{
+public class ShotsRemoteDataSource implements ShotsDataSource {
 
     private static ShotsRemoteDataSource INSTANCE;
 
     public static ShotsRemoteDataSource getInstance() {
-        if (INSTANCE == null){
+        if (INSTANCE == null) {
             INSTANCE = new ShotsRemoteDataSource();
         }
         return INSTANCE;
@@ -38,12 +36,22 @@ public class ShotsRemoteDataSource implements ShotsDataSource{
 
     @Override
     public Observable<List<Like>> getShotLikes(int shotId, int page) {
-        return Netutils.getApiService().getShotLikes(shotId,page);
+        return Netutils.getApiService().getShotLikes(shotId, page);
     }
 
     @Override
     public Observable<List<Comment>> getShotComments(int shotId, int page) {
-        return Netutils.getApiService().getShotComments(shotId,page);
+        return Netutils.getApiService().getShotComments(shotId, page);
+    }
+
+    @Override
+    public Observable<List<Bucket>> getShotBuckets(int shotId, int page) {
+        return Netutils.getApiService().getShotBuckets(shotId, page);
+    }
+
+    @Override
+    public Observable<List<Shot>> getBucketShots(int bucketId, int page) {
+        return Netutils.getApiService().getBucketShots(bucketId,page);
     }
 
 }
