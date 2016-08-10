@@ -6,8 +6,14 @@ import com.shen.dribbble.data.Comment;
 import com.shen.dribbble.data.Like;
 import com.shen.dribbble.data.User;
 import com.shen.dribbble.data.source.ShotsDataSource;
+import com.shen.dribbble.utils.BaseObserver;
 
 import java.util.List;
+
+import rx.Observer;
+import rx.Scheduler;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by shen on 2016/8/7.
@@ -25,18 +31,15 @@ public class CommentsPresenter implements CommentsContract.Presenter {
 
     @Override
     public void loadComments(int shotId, int page) {
-        shotsDataSource.getShotComments(shotId, page, new ShotsDataSource.LoadShotCommentsCallback() {
-
-            @Override
-            public void onCommentsLoad(List<Comment> comments) {
-                commentsView.showComments(comments);
-            }
-
-            @Override
-            public void onDataNotAvailable() {
-
-            }
-        });
+        shotsDataSource.getShotComments(shotId, page)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<List<Comment>>(){
+                    @Override
+                    public void next(List<Comment> comments) {
+                        commentsView.showComments(comments);
+                    }
+                });
     }
 
     @Override

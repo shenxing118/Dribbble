@@ -9,8 +9,12 @@ import com.shen.dribbble.data.Shot;
 import com.shen.dribbble.data.User;
 import com.shen.dribbble.data.source.ShotsDataSource;
 import com.shen.dribbble.data.source.ShotsRemoteDataSource;
+import com.shen.dribbble.utils.BaseObserver;
 
 import java.util.List;
+
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by shen on 2016/8/2.
@@ -27,17 +31,15 @@ public class ShotsPresenter implements ShotsContract.Presenter{
 
     @Override
     public void loadShots(int page) {
-        shotsDataSource.loadShots(page, new ShotsDataSource.LoadShotsCallback() {
-            @Override
-            public void onShotsLoaded(List<Shot> shots) {
-                shotsView.showShots(shots);
-            }
-
-            @Override
-            public void onDataNotAvailable() {
-
-            }
-        });
+        shotsDataSource.loadShots(page)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new BaseObserver<List<Shot>>() {
+                        @Override
+                        protected void next(List<Shot> shots) {
+                            shotsView.showShots(shots);
+                        }
+                    });
     }
 
     @Override

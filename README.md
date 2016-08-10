@@ -1,24 +1,26 @@
 # Dribbble
 A android client for Dribbble(https://dribbble.com).
-This project just started,you can use it browse shots and details.Later, 
+This project just started,you can use it browse shots and details in dribbble.Later,
 I will continue to improve it until it can be used.
 
 With the following techniques：
 
-mvp + databinding
+mvp
+
+databinding
 
 Material design
 
-retrofit + okhttp
+retrofit + okhttp + rxjava
 
 fresco
 
-<img src="https://github.com/shenxing118/Dribbble/blob/master/app/src/main/res/drawable/Screenshot_20160809-141551.png" width="30%" height="30%">
+<img src="https://github.com/shenxing118/Dribbble/blob/master/app/src/main/res/drawable/screenshot1.png" width="30%" height="30%">
 
-<img src="https://github.com/shenxing118/Dribbble/blob/master/app/src/main/res/drawable/Screenshot_20160809-141752.png" width="30%" height="30%">
+<img src="https://github.com/shenxing118/Dribbble/blob/master/app/src/main/res/drawable/screenshot2.png" width="30%" height="30%">
 
-<img src="https://github.com/shenxing118/Dribbble/blob/master/app/src/main/res/drawable/Screenshot_20160809-141616.png" width="30%" height="30%">
+<img src="https://github.com/shenxing118/Dribbble/blob/master/app/src/main/res/drawable/screenshot3.png" width="30%" height="30%">
 
-<img src="https://github.com/shenxing118/Dribbble/blob/master/app/src/main/res/drawable/Screenshot_20160809-141803.png" width="30%" height="30%">
+<img src="https://github.com/shenxing118/Dribbble/blob/master/app/src/main/res/drawable/screenshot4.png" width="30%" height="30%">
 
-<img src="https://github.com/shenxing118/Dribbble/blob/master/app/src/main/res/drawable/Screenshot_20160809-141844.png" width="30%" height="30%">
+<img src="https://github.com/shenxing118/Dribbble/blob/master/app/src/main/res/drawable/screenshot5.png" width="30%" height="30%">

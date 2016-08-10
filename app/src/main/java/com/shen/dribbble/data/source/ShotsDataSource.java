@@ -6,33 +6,19 @@ import com.shen.dribbble.data.Shot;
 
 import java.util.List;
 
+import rx.Observable;
+
 /**
  * Created by shen on 2016/8/2.
  */
 public interface ShotsDataSource {
 
-    interface LoadShotsCallback{
-        void onShotsLoaded(List<Shot> shots);
-        void onDataNotAvailable();
-    }
+    Observable<List<Shot>> loadShots(int page);
 
-    interface LoadShotLikesCallback{
-        void onLikesLoad(List<Like> likes);
-        void onDataNotAvailable();
-    }
+    Observable<List<Shot>> getUserShots(String user,int page);
 
-    interface LoadShotCommentsCallback{
-        void onCommentsLoad(List<Comment> comments);
-        void onDataNotAvailable();
-    }
+    Observable<List<Like>> getShotLikes(int shotId,int page);
 
-
-    void loadShots(int page,LoadShotsCallback callback);
-
-    void getUserShots(String user,int page,LoadShotsCallback callback);
-
-    void getShotLikes(int shotId,int page,LoadShotLikesCallback callback);
-
-    void getShotComments(int shotId,int page,LoadShotCommentsCallback callback);
+    Observable<List<Comment>> getShotComments(int shotId, int page);
 
 }

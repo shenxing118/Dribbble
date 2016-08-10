@@ -10,6 +10,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import rx.Observable;
 
 /**
  * Created by shen on 2016/8/2.
@@ -26,78 +27,23 @@ public class ShotsRemoteDataSource implements ShotsDataSource{
     }
 
     @Override
-    public void loadShots(int page, final LoadShotsCallback callback) {
-        Call<List<Shot>> objectCall = Netutils.getApiService().getShots(page);
-        objectCall.enqueue(new Callback<List<Shot>>() {
-            @Override
-            public void onResponse(Call<List<Shot>> call, Response<List<Shot>> response) {
-                List<Shot> shots = response.body();
-                if (shots != null) {
-                   callback.onShotsLoaded(shots);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Shot>> call, Throwable t) {
-                callback.onDataNotAvailable();
-            }
-        });
+    public Observable<List<Shot>> loadShots(int page) {
+        return Netutils.getApiService().getShots(page);
     }
 
     @Override
-    public void getUserShots(String user, int page, final LoadShotsCallback callback) {
-        Netutils.getApiService().getUserShots(user, page).enqueue(new Callback<List<Shot>>() {
-            @Override
-            public void onResponse(Call<List<Shot>> call, Response<List<Shot>> response) {
-                List<Shot> shots = response.body();
-                if (shots != null) {
-                    callback.onShotsLoaded(shots);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Shot>> call, Throwable t) {
-                callback.onDataNotAvailable();
-            }
-        });
+    public Observable<List<Shot>> getUserShots(String user, int page) {
+        return Netutils.getApiService().getUserShots(user, page);
     }
 
     @Override
-    public void getShotLikes(int shotId, int page, final LoadShotLikesCallback callback) {
-        Netutils.getApiService().getShotLikes(shotId,page).enqueue(new Callback<List<Like>>() {
-            @Override
-            public void onResponse(Call<List<Like>> call, Response<List<Like>> response) {
-                List<Like> likes = response.body();
-                if (likes != null){
-                    callback.onLikesLoad(likes);
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<List<Like>> call, Throwable t) {
-                callback.onDataNotAvailable();
-            }
-        });
+    public Observable<List<Like>> getShotLikes(int shotId, int page) {
+        return Netutils.getApiService().getShotLikes(shotId,page);
     }
 
     @Override
-    public void getShotComments(int shotId, int page, final LoadShotCommentsCallback callback) {
-        Netutils.getApiService().getShotComments(shotId,page).enqueue(new Callback<List<Comment>>() {
-            @Override
-            public void onResponse(Call<List<Comment>> call, Response<List<Comment>> response) {
-                List<Comment> comments = response.body();
-                if (comments != null) {
-                    callback.onCommentsLoad(comments);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Comment>> call, Throwable t) {
-                callback.onDataNotAvailable();
-            }
-        });
+    public Observable<List<Comment>> getShotComments(int shotId, int page) {
+        return Netutils.getApiService().getShotComments(shotId,page);
     }
-
 
 }
