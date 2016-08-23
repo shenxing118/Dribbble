@@ -20,12 +20,12 @@ You can download the apk at [this](app/app-release.apk)
 
 #Demo
 
-<img src="https://github.com/shenxing118/Dribbble/blob/master/app/src/main/res/drawable/screenshot1.png" width="30%" height="30%">
+<img src="https://github.com/shenxing118/Dribbble/blob/master/screenshot1.png" width="30%" height="30%">
 
-<img src="https://github.com/shenxing118/Dribbble/blob/master/app/src/main/res/drawable/screenshot2.png" width="30%" height="30%">
+<img src="https://github.com/shenxing118/Dribbble/blob/master/screenshot2.png" width="30%" height="30%">
 
-<img src="https://github.com/shenxing118/Dribbble/blob/master/app/src/main/res/drawable/screenshot3.png" width="30%" height="30%">
+<img src="https://github.com/shenxing118/Dribbble/blob/master/screenshot3.png" width="30%" height="30%">
 
-<img src="https://github.com/shenxing118/Dribbble/blob/master/app/src/main/res/drawable/screenshot4.png" width="30%" height="30%">
+<img src="https://github.com/shenxing118/Dribbble/blob/master/screenshot4.png" width="30%" height="30%">
 
-<img src="https://github.com/shenxing118/Dribbble/blob/master/app/src/main/res/drawable/screenshot5.png" width="30%" height="30%">
+<img src="https://github.com/shenxing118/Dribbble/blob/master/screenshot5.png" width="30%" height="30%">
