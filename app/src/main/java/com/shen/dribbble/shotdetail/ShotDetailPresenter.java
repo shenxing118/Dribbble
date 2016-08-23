@@ -9,7 +9,7 @@ import com.shen.dribbble.data.User;
  */
 public class ShotDetailPresenter implements ShotDetailContract.Presenter {
 
-    private ShotDetailContract.View shotDetailView;
+    private final ShotDetailContract.View shotDetailView;
 
     public ShotDetailPresenter(ShotDetailContract.View shotDetailView){
         this.shotDetailView = shotDetailView;

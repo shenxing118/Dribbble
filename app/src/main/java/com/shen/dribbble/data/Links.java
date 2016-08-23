@@ -59,7 +59,7 @@ public class Links implements Parcelable {
     public Links() {
     }
 
-    protected Links(Parcel in) {
+    Links(Parcel in) {
         this.web = in.readString();
         this.twitter = in.readString();
     }

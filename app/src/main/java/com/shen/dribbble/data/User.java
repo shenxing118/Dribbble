@@ -565,7 +565,7 @@ public class User implements Parcelable {
     public User() {
     }
 
-    protected User(Parcel in) {
+    User(Parcel in) {
         this.id = (Integer) in.readValue(Integer.class.getClassLoader());
         this.name = in.readString();
         this.username = in.readString();

@@ -19,11 +19,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 /**
  * Created by shen on 2016/7/22.
  */
-public class Netutils {
+public class NetUtils {
 
-    public static final String BASE_URL = "https://api.dribbble.com/v1/";
+    private static final String BASE_URL = "https://api.dribbble.com/v1/";
 
-    static Retrofit retrofit;
+    private static Retrofit retrofit;
 
     private static void createRetrofit() {
         Interceptor interceptor = new Interceptor() {
@@ -65,10 +65,4 @@ public class Netutils {
         return retrofit.create(DribbbleApiService.class);
     }
 
-    public static Retrofit getRetrofit() {
-        if (retrofit == null) {
-            createRetrofit();
-        }
-        return retrofit;
-    }
 }

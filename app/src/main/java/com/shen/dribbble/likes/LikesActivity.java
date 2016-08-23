@@ -1,6 +1,5 @@
 package com.shen.dribbble.likes;
 
-import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -23,22 +22,25 @@ import com.shen.dribbble.databinding.LikeItemBinding;
 import com.shen.dribbble.utils.BaseRecyclerViewAdapter;
 import com.shen.dribbble.utils.BaseViewHolder;
 import com.shen.dribbble.utils.UIUtils;
+import com.trello.rxlifecycle.ActivityEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import rx.Observable;
 
 /**
  * Created by shen on 2016/8/6.
  */
 public class LikesActivity extends BaseActivity implements LikesContract.View{
 
-    LikeAdapter likeAdapter;
+    private LikeAdapter likeAdapter;
 
-    int page = 1;
+    private int page = 1;
 
-    LikesContract.Presenter likesPresenter;
+    private LikesContract.Presenter likesPresenter;
 
-    RecyclerView recyclerView;
+    private RecyclerView recyclerView;
 
     private int shotId;
     private SwipeRefreshLayout swipeRefreshL;
@@ -48,7 +50,6 @@ public class LikesActivity extends BaseActivity implements LikesContract.View{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recyclerview_act);
 
-        setStatusBarColor();
         setToolBar("Likes",true);
 
         shotId = getIntent().getIntExtra("shotId",0);
@@ -57,7 +58,7 @@ public class LikesActivity extends BaseActivity implements LikesContract.View{
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        likeAdapter = new LikeAdapter(this,new ArrayList<Like>(0),R.layout.like_item,likesPresenter);
+        likeAdapter = new LikeAdapter(new ArrayList<Like>(0), likesPresenter);
 
         View footerView = LayoutInflater.from(this).inflate(R.layout.load_more_footer,recyclerView,false);
         likeAdapter.setFooterView(footerView);
@@ -120,8 +121,8 @@ public class LikesActivity extends BaseActivity implements LikesContract.View{
 
     private static class LikeAdapter extends BaseRecyclerViewAdapter<Like>{
 
-        public LikeAdapter(Context context, List<Like> mDatas, int resourceId, BasePresenter presenter) {
-            super(context, mDatas, resourceId, presenter);
+        public LikeAdapter(List<Like> mDatas, BasePresenter presenter) {
+            super(mDatas, R.layout.like_item, presenter);
         }
 
         @Override

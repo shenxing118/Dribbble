@@ -19,7 +19,7 @@ public interface ShotDetailContract {
         void onAvatarClick(User user,android.view.View view);
     }
 
-    interface View extends BaseView<Presenter> {
+    interface View extends BaseView {
         void showLikes(int shotId);
 
         void showComments(int shotId);

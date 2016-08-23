@@ -4,8 +4,11 @@
     xmlns:fresco="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <import type="android.view.View" />
+
         <import type="android.text.format.DateUtils" />
+
         <import type="java.lang.System" />
 
         <variable
@@ -18,7 +21,6 @@
     </data>
 
     <android.support.design.widget.CoordinatorLayout
-        android:id="@+id/main_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
@@ -32,7 +34,6 @@
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
             <android.support.design.widget.CollapsingToolbarLayout
-                android:id="@+id/collapsing_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true"
@@ -80,9 +81,9 @@
                         android:id="@+id/avatarImage"
                         android:layout_width="45dp"
                         android:layout_height="45dp"
-                        fresco:placeholderImage="@drawable/person_image_empty"
-                        fresco:roundAsCircle="true"
-                        android:onClick="@{(view) -> presenter.onAvatarClick(shot.user,view)}"/>
+                        android:onClick="@{(view) -> presenter.onAvatarClick(shot.user,view)}"
+                        fresco:placeholderImage="@mipmap/person_image_empty"
+                        fresco:roundAsCircle="true" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -100,7 +101,6 @@
                             android:textSize="14sp" />
 
                         <TextView
-                            android:id="@+id/date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
@@ -118,39 +118,30 @@
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:text="@{shot.title}"
-                    android:textSize="18sp"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
-                    android:layout_marginTop="10dp"
                     android:textColor="@color/black" />
 
-                <LinearLayout
-                    android:id="@+id/tagsLL"
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:drawableLeft="@mipmap/ic_loyalty_black"
+                    android:drawablePadding="5dp"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
-                    android:visibility="@{shot.tags == null || shot.tags.size() == 0 ? View.INVISIBLE : View.VISIBLE}">
+                    android:text="@{shot.tags.toString()}"
+                    android:textColor="@color/colorPrimary"
+                    android:visibility="@{shot.tags == null || shot.tags.size() == 0 ? View.INVISIBLE : View.VISIBLE}" />
 
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@mipmap/ic_loyalty_black" />
-
-                    <TextView
-                        android:id="@+id/tags"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:text="@{shot.tags.toString()}"
-                        android:textColor="@color/colorPrimary" />
-                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -164,6 +155,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/round_corner"
                         android:gravity="center"
+                        android:onClick="@{() -> presenter.onBucketsClick(shot.id)}"
                         android:padding="8dp"
                         android:text="bucket"
                         android:textColor="@color/white"
@@ -176,6 +168,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/round_corner"
                         android:gravity="center"
+                        android:onClick="@{() -> presenter.onCommentsClick(shot.id)}"
                         android:padding="8dp"
                         android:text="comment"
                         android:textColor="@color/white"
@@ -183,23 +176,17 @@
 
                 </LinearLayout>
 
-                <RelativeLayout
+
+                <View
                     android:layout_width="match_parent"
-                    android:layout_height="15dp"
-                    android:background="@color/white">
+                    android:layout_height="8dp"
+                    android:background="@drawable/gray_gradient" />
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="8dp"
-                        android:background="@drawable/gray_gradient" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_alignParentBottom="true"
-                        android:background="@color/light_gray" />
-
-                </RelativeLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="7dp"
+                    android:background="@color/light_gray" />
 
 
                 <LinearLayout
@@ -210,36 +197,21 @@
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp">
 
-                    <ImageView
-                        android:layout_width="0dp"
-                        android:layout_height="25dp"
-                        android:layout_weight="1"
-                        android:scaleType="fitStart"
-                        android:src="@mipmap/ic_shot_liked" />
-
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
                         android:layout_marginRight="10dp"
                         android:layout_weight="2"
+                        android:drawableLeft="@mipmap/ic_shot_liked"
                         android:gravity="right"
                         android:onClick="@{() -> presenter.onLikesClick(shot.id)}"
                         android:text='@{shot.likesCount + " likes"}' />
 
-                    <ImageView
-                        android:layout_width="0dp"
-                        android:layout_height="25dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_weight="1"
-                        android:scaleType="fitStart"
-                        android:src="@mipmap/ic_shot_comment" />
-
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
                         android:layout_weight="2"
+                        android:drawableLeft="@mipmap/ic_shot_comment"
                         android:gravity="right"
                         android:onClick="@{() -> presenter.onCommentsClick(shot.id)}"
                         android:text='@{shot.commentsCount + " comments"}' />
@@ -254,35 +226,21 @@
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp">
 
-                    <ImageView
-                        android:layout_width="0dp"
-                        android:layout_height="25dp"
-                        android:layout_weight="1"
-                        android:scaleType="fitStart"
-                        android:src="@mipmap/ic_shot_views" />
-
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
                         android:layout_marginRight="10dp"
                         android:layout_weight="2"
+                        android:drawableLeft="@mipmap/ic_shot_views"
                         android:gravity="right"
                         android:text='@{shot.viewsCount + " views"}' />
 
-                    <ImageView
-                        android:layout_width="0dp"
-                        android:layout_height="25dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_weight="1"
-                        android:scaleType="fitStart"
-                        android:src="@mipmap/ic_shot_buckets" />
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
                         android:layout_weight="2"
+                        android:drawableLeft="@mipmap/ic_shot_buckets"
                         android:gravity="right"
                         android:onClick="@{() -> presenter.onBucketsClick(shot.id)}"
                         android:text='@{shot.bucketsCount + " buckets"}' />
@@ -292,9 +250,8 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
-                    android:layout_alignParentBottom="true"
+                    android:layout_marginTop="10dp"
                     android:background="@color/light_gray" />
 
             </LinearLayout>

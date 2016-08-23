@@ -9,8 +9,8 @@ import android.view.View;
  */
 public class BaseViewHolder extends RecyclerView.ViewHolder {
 
-    public ViewDataBinding binding;
-    View.OnClickListener onClickListener;
+    public final ViewDataBinding binding;
+    private View.OnClickListener onClickListener;
 
     public BaseViewHolder(ViewDataBinding binding) {
         super(binding.getRoot());

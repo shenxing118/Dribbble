@@ -9,9 +9,9 @@ import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class NetCacheInterceptor implements Interceptor {
-    private int maxCacheSeconds;
-    private Headers commonHeaders;
+class NetCacheInterceptor implements Interceptor {
+    private final int maxCacheSeconds;
+    private final Headers commonHeaders;
 
     public NetCacheInterceptor(int maxCacheSeconds, Headers commonHeaders) {
         this.maxCacheSeconds = maxCacheSeconds;

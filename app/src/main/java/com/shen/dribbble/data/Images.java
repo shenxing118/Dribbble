@@ -75,7 +75,7 @@ public class Images implements Parcelable {
     public Images() {
     }
 
-    protected Images(Parcel in) {
+    Images(Parcel in) {
         this.hidpi = in.readString();
         this.normal = in.readString();
         this.teaser = in.readString();

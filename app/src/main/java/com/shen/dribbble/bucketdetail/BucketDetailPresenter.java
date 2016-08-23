@@ -1,14 +1,15 @@
 package com.shen.dribbble.bucketdetail;
 
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.shen.dribbble.R;
+import com.shen.dribbble.data.Bucket;
 import com.shen.dribbble.data.Shot;
 import com.shen.dribbble.data.User;
 import com.shen.dribbble.data.source.ShotsDataSource;
 import com.shen.dribbble.utils.BaseObserver;
+import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
 import java.util.List;
 
@@ -20,8 +21,8 @@ import rx.schedulers.Schedulers;
  */
 public class BucketDetailPresenter implements BucketDetailContract.Presenter{
 
-    private ShotsDataSource shotsDataSource;
-    private BucketDetailContract.View shotsView;
+    private final ShotsDataSource shotsDataSource;
+    private final BucketDetailContract.View shotsView;
 
     public BucketDetailPresenter(ShotsDataSource shotsDataSource, BucketDetailContract.View shotsView){
         this.shotsDataSource = shotsDataSource;
@@ -31,6 +32,7 @@ public class BucketDetailPresenter implements BucketDetailContract.Presenter{
     @Override
     public void loadBucketShots(int bucketId,int page) {
         shotsDataSource.getBucketShots(bucketId,page)
+                    .compose(((RxAppCompatActivity)shotsView).<List<Shot>>bindToLifecycle())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new BaseObserver<List<Shot>>() {

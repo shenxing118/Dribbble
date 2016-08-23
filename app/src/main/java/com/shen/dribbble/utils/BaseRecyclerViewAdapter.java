@@ -1,6 +1,5 @@
 package com.shen.dribbble.utils;
 
-import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.support.v7.widget.RecyclerView;
@@ -10,24 +9,22 @@ import android.view.ViewGroup;
 
 import com.shen.dribbble.BasePresenter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<BaseViewHolder> {
 
     protected List<T> mDatas;
-    protected Context context;
-    protected int resourceId;
-    protected static final int ITEM_TYPE_HEADER = 0;
-    protected static final int ITEM_TYPE_NORMAL = 1;
-    protected static final int ITEM_TYPE_FOOTER = 2;
+    private final int resourceId;
+    private static final int ITEM_TYPE_HEADER = 0;
+    private static final int ITEM_TYPE_NORMAL = 1;
+    private static final int ITEM_TYPE_FOOTER = 2;
 
-    protected View headerView, footerView;
+    private View headerView;
+    private View footerView;
 
-    protected BasePresenter presenter;
+    protected final BasePresenter presenter;
 
-    public BaseRecyclerViewAdapter(Context context, List<T> mDatas,int resourceId,BasePresenter presenter) {
-        this.context = context;
+    public BaseRecyclerViewAdapter(List<T> mDatas, int resourceId, BasePresenter presenter) {
         this.mDatas = mDatas;
         this.resourceId = resourceId;
         this.presenter = presenter;
@@ -106,11 +103,11 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<Ba
         return footerView != null;
     }
 
-    public boolean isHeader(int position) {
+    private boolean isHeader(int position) {
         return position == 0 && hasHeader();
     }
 
-    public boolean isFooter(int position) {
+    private boolean isFooter(int position) {
         return position == getItemCount() - 1 && footerView != null;
     }
 

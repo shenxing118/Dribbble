@@ -36,7 +36,7 @@
                 android:id="@+id/avatarImage"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                fresco:placeholderImage="@drawable/person_image_empty"
+                fresco:placeholderImage="@mipmap/person_image_empty"
                 fresco:roundAsCircle="true" />
 
             <TextView

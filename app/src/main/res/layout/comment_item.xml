@@ -23,7 +23,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_margin="10dp"
-            fresco:placeholderImage="@drawable/person_image_empty"
+            fresco:placeholderImage="@mipmap/person_image_empty"
             fresco:roundAsCircle="true"
             android:onClick="@{(view) -> presenter.onAvatarClick(view,comment.user)}"/>
 

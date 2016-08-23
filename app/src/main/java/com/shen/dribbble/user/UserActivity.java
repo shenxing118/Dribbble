@@ -1,7 +1,6 @@
 package com.shen.dribbble.user;
 
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.graphics.Rect;
 import android.net.Uri;
@@ -48,8 +47,7 @@ public class UserActivity extends BaseActivity implements UserContract.View {
     private static final int pageSize = 12;
 
     private UserContract.Presenter userPresenter;
-    RecyclerView recyclerView;
-
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,7 +60,6 @@ public class UserActivity extends BaseActivity implements UserContract.View {
 
         userPresenter = new UserPresenter(ShotsRemoteDataSource.getInstance(),this);
 
-        setStatusBarColor();
         setToolBar(user.getName(),true);
 
         recyclerView = (RecyclerView) findViewById(R.id.profile_recycler);
@@ -74,7 +71,7 @@ public class UserActivity extends BaseActivity implements UserContract.View {
                         || (imageAdapter.hasFooter() && position == imageAdapter.getItemCount() - 1) ? 3 : 1;
             }
         });
-        imageAdapter = new ShotImageAdapter(this, new ArrayList<Shot>(0),R.layout.user_shot_item,userPresenter);
+        imageAdapter = new ShotImageAdapter(new ArrayList<Shot>(0), userPresenter);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(new SpaceItemDecoration(CommonTools.dip2px(this, 2)));
 
@@ -180,8 +177,8 @@ public class UserActivity extends BaseActivity implements UserContract.View {
 
     private static class ShotImageAdapter extends BaseRecyclerViewAdapter<Shot>{
 
-        public ShotImageAdapter(Context context, List<Shot> mDatas, int resourceId, BasePresenter presenter) {
-            super(context, mDatas, resourceId, presenter);
+        public ShotImageAdapter(List<Shot> mDatas, BasePresenter presenter) {
+            super(mDatas, R.layout.user_shot_item, presenter);
         }
 
         @Override
@@ -197,7 +194,7 @@ public class UserActivity extends BaseActivity implements UserContract.View {
 
     private static class SpaceItemDecoration extends RecyclerView.ItemDecoration {
 
-        private int space;
+        private final int space;
 
         public SpaceItemDecoration(int space) {
             this.space = space;

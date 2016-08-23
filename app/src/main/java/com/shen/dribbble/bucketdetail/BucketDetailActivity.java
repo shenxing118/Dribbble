@@ -46,12 +46,11 @@ public class BucketDetailActivity extends BaseActivity implements BucketDetailCo
         bucket = getIntent().getParcelableExtra("bucket");
         bucketsPresenter = new BucketDetailPresenter(ShotsRemoteDataSource.getInstance(), this);
 
-        setStatusBarColor();
         setToolBar("BucketDetail", true);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.shots_list);
 
-        shotsAdapter = new ShotsActivity.ShotsAdapter(this, new ArrayList<Shot>(0), R.layout.shot_item, bucketsPresenter);
+        shotsAdapter = new ShotsActivity.ShotsAdapter(new ArrayList<Shot>(0), bucketsPresenter);
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
         layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override

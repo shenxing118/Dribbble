@@ -17,7 +17,7 @@ public interface UserContract {
         void onItemClick(android.view.View view, Shot shot);
     }
 
-    interface View extends BaseView<Presenter> {
+    interface View extends BaseView {
         void showUserShots(List<Shot> shots);
 
         void showShotDetail(android.view.View view, Shot shot);

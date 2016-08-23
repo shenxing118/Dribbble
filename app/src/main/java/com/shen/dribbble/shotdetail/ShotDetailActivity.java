@@ -13,6 +13,7 @@ import android.view.View;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.drawable.ProgressBarDrawable;
+import com.facebook.drawee.drawable.ScalingUtils;
 import com.facebook.drawee.generic.GenericDraweeHierarchy;
 import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
 import com.facebook.drawee.interfaces.DraweeController;
@@ -24,7 +25,7 @@ import com.shen.dribbble.buckets.BucketsActivity;
 import com.shen.dribbble.comments.CommentsActivity;
 import com.shen.dribbble.data.Shot;
 import com.shen.dribbble.data.User;
-import com.shen.dribbble.databinding.ShotdetailActBinding;
+import com.shen.dribbble.databinding.ShotDetailActBinding;
 import com.shen.dribbble.likes.LikesActivity;
 import com.shen.dribbble.utils.CommonTools;
 import com.shen.dribbble.utils.UIUtils;
@@ -37,17 +38,14 @@ public class ShotDetailActivity extends BaseActivity implements ShotDetailContra
     private Shot shot;
     private SimpleDraweeView shotDraw;
 
-    private ShotdetailActBinding dataBinding;
-
-    private ShotDetailPresenter shotDetailPresenter;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.setSetStatusBarColor(false);
         super.onCreate(savedInstanceState);
 
-        dataBinding = DataBindingUtil.setContentView(this, R.layout.shotdetail_act);
+        ShotDetailActBinding dataBinding = DataBindingUtil.setContentView(this, R.layout.shot_detail_act);
 
-        shotDetailPresenter = new ShotDetailPresenter(this);
+        ShotDetailPresenter shotDetailPresenter = new ShotDetailPresenter(this);
 
         shot = getIntent().getParcelableExtra("shot");
 
@@ -58,7 +56,7 @@ public class ShotDetailActivity extends BaseActivity implements ShotDetailContra
         shotDraw = dataBinding.shotDraw;
         AppBarLayout appbar = dataBinding.appbar;
 
-        setToolBar("", true);
+        setToolBar(shot.getTitle(), true);
 
         int screenWidth = CommonTools.getScreenWidth();
         appbar.getLayoutParams().width = screenWidth;
@@ -75,6 +73,17 @@ public class ShotDetailActivity extends BaseActivity implements ShotDetailContra
             dataBinding.description.setMovementMethod(LinkMovementMethod.getInstance());
 //            dataBinding.description.requestLayout();
         }
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     private void loadShotImage() {
@@ -83,7 +92,7 @@ public class ShotDetailActivity extends BaseActivity implements ShotDetailContra
         progressBarDrawable.setPadding(0);
         progressBarDrawable.setColor(getResources().getColor(R.color.colorPrimary));
 
-        GenericDraweeHierarchy hierarchy = new GenericDraweeHierarchyBuilder(getResources()).setProgressBarImage(progressBarDrawable).setPlaceholderImage(R.drawable.placeholder).build();
+        GenericDraweeHierarchy hierarchy = new GenericDraweeHierarchyBuilder(getResources()).setProgressBarImage(progressBarDrawable).setPlaceholderImage(R.mipmap.placeholder).setPlaceholderImageScaleType(ScalingUtils.ScaleType.CENTER_CROP).build();
 
         DraweeController controller = Fresco.newDraweeControllerBuilder()
                 .setLowResImageRequest(ImageRequest.fromUri(shot.getImages().getNormal()))

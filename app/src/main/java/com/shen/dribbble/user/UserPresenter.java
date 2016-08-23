@@ -5,6 +5,7 @@ import android.view.View;
 import com.shen.dribbble.data.Shot;
 import com.shen.dribbble.data.source.ShotsDataSource;
 import com.shen.dribbble.utils.BaseObserver;
+import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
 import java.util.List;
 
@@ -16,8 +17,8 @@ import rx.schedulers.Schedulers;
  */
 public class UserPresenter implements UserContract.Presenter {
 
-    private ShotsDataSource shotsDataSource;
-    private UserContract.View userView;
+    private final ShotsDataSource shotsDataSource;
+    private final UserContract.View userView;
 
     public UserPresenter(ShotsDataSource shotsDataSource, UserContract.View userView) {
         this.shotsDataSource = shotsDataSource;
@@ -27,6 +28,7 @@ public class UserPresenter implements UserContract.Presenter {
     @Override
     public void getUserShots(String user, int page) {
         shotsDataSource.getUserShots(user, page)
+                .compose(((RxAppCompatActivity)userView).<List<Shot>>bindToLifecycle())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new BaseObserver<List<Shot>>() {

@@ -6,8 +6,6 @@ import com.shen.dribbble.BaseView;
 import com.shen.dribbble.data.Shot;
 import com.shen.dribbble.data.User;
 
-import java.util.List;
-
 /**
  * Created by shen on 2016/8/2.
  */
@@ -20,7 +18,7 @@ public interface ShotItemContract {
         void onAvatarClick(User user, android.view.View view);
     }
 
-    interface View extends BaseView<Presenter> {
+    interface View extends BaseView {
 
         void showShotDetail(Shot shot, SimpleDraweeView draweeView);
 

@@ -579,7 +579,7 @@ public class Team implements Parcelable {
     public Team() {
     }
 
-    protected Team(Parcel in) {
+    Team(Parcel in) {
         this.id = (Integer) in.readValue(Integer.class.getClassLoader());
         this.name = in.readString();
         this.username = in.readString();

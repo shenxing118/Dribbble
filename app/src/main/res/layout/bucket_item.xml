@@ -16,7 +16,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{(view) -> presenter.onBucketItemClick(view,bucket)}">
+        android:onClick="@{(view) -> presenter.onBucketItemClick(bucket)}">
 
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/avatarImage"
@@ -24,7 +24,7 @@
             android:layout_height="50dp"
             android:layout_margin="10dp"
             android:onClick="@{(view) -> presenter.onAvatarClick(view,bucket.user)}"
-            fresco:placeholderImage="@drawable/person_image_empty"
+            fresco:placeholderImage="@mipmap/person_image_empty"
             fresco:roundAsCircle="true" />
 
         <TextView
@@ -47,7 +47,6 @@
             android:text='@{"curated by " + bucket.user.name}'/>
 
         <TextView
-            android:id="@+id/shotsCount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/username"

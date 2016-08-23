@@ -1,15 +1,14 @@
 package com.shen.dribbble.shots;
 
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.shen.dribbble.R;
 import com.shen.dribbble.data.Shot;
 import com.shen.dribbble.data.User;
 import com.shen.dribbble.data.source.ShotsDataSource;
-import com.shen.dribbble.data.source.ShotsRemoteDataSource;
 import com.shen.dribbble.utils.BaseObserver;
+import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
 import java.util.List;
 
@@ -21,8 +20,8 @@ import rx.schedulers.Schedulers;
  */
 public class ShotsPresenter implements ShotsContract.Presenter{
 
-    private ShotsDataSource shotsDataSource;
-    private ShotsContract.View shotsView;
+    private final ShotsDataSource shotsDataSource;
+    private final ShotsContract.View shotsView;
 
     public ShotsPresenter(ShotsDataSource shotsDataSource,ShotsContract.View shotsView){
         this.shotsDataSource = shotsDataSource;
@@ -32,6 +31,7 @@ public class ShotsPresenter implements ShotsContract.Presenter{
     @Override
     public void loadShots(int page) {
         shotsDataSource.loadShots(page)
+                .compose(((RxAppCompatActivity)shotsView).<List<Shot>>bindToLifecycle())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new BaseObserver<List<Shot>>() {
@@ -44,7 +44,7 @@ public class ShotsPresenter implements ShotsContract.Presenter{
 
     @Override
     public void onShotItemClick(Shot shot, View view) {
-        SimpleDraweeView draweeView = (SimpleDraweeView) ((ViewGroup)view).findViewById(R.id.shotDraw);
+        SimpleDraweeView draweeView = (SimpleDraweeView) view.findViewById(R.id.shotDraw);
         shotsView.showShotDetail(shot,draweeView);
     }
 

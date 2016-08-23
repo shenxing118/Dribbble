@@ -1,6 +1,5 @@
 package com.shen.dribbble.buckets;
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -50,7 +49,6 @@ public class BucketsActivity extends BaseActivity implements BucketsContract.Vie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recyclerview_act);
 
-        setStatusBarColor();
         setToolBar("Buckets", true);
 
         shotId = getIntent().getIntExtra("shotId", 0);
@@ -58,7 +56,7 @@ public class BucketsActivity extends BaseActivity implements BucketsContract.Vie
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        bucketsAdapter = new BucketsAdapter(this, new ArrayList<Bucket>(0), R.layout.bucket_item, bucketsPresenter);
+        bucketsAdapter = new BucketsAdapter(new ArrayList<Bucket>(0), bucketsPresenter);
 
         View footerView = LayoutInflater.from(this).inflate(R.layout.load_more_footer, recyclerView, false);
         bucketsAdapter.setFooterView(footerView);
@@ -121,7 +119,7 @@ public class BucketsActivity extends BaseActivity implements BucketsContract.Vie
     }
 
     @Override
-    public void showBucketDetail(View view, Bucket bucket) {
+    public void showBucketDetail(Bucket bucket) {
         Intent intent = new Intent(this, BucketDetailActivity.class);
         intent.putExtra("bucket",bucket);
         startActivity(intent);
@@ -129,8 +127,8 @@ public class BucketsActivity extends BaseActivity implements BucketsContract.Vie
 
     private static class BucketsAdapter extends BaseRecyclerViewAdapter<Bucket> {
 
-        public BucketsAdapter(Context context, List<Bucket> mDatas, int resourceId, BasePresenter presenter) {
-            super(context, mDatas, resourceId, presenter);
+        public BucketsAdapter(List<Bucket> mDatas, BasePresenter presenter) {
+            super(mDatas, R.layout.bucket_item, presenter);
         }
 
         @Override

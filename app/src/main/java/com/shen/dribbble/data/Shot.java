@@ -87,7 +87,7 @@ public class Shot implements Parcelable{
     private Boolean animated;
     @SerializedName("tags")
     @Expose
-    private List<String> tags = new ArrayList<String>();
+    private List<String> tags = new ArrayList<>();
     @SerializedName("user")
     @Expose
     private User user;

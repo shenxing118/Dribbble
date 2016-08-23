@@ -7,11 +7,10 @@ import com.shen.dribbble.data.Like;
 import com.shen.dribbble.data.User;
 import com.shen.dribbble.data.source.ShotsDataSource;
 import com.shen.dribbble.utils.BaseObserver;
+import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
 import java.util.List;
 
-import rx.Observer;
-import rx.Scheduler;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -20,9 +19,9 @@ import rx.schedulers.Schedulers;
  */
 public class CommentsPresenter implements CommentsContract.Presenter {
 
-    CommentsContract.View commentsView;
+    private final CommentsContract.View commentsView;
 
-    ShotsDataSource shotsDataSource;
+    private final ShotsDataSource shotsDataSource;
 
     public CommentsPresenter(CommentsContract.View commentsView, ShotsDataSource shotsDataSource) {
         this.commentsView = commentsView;
@@ -32,6 +31,7 @@ public class CommentsPresenter implements CommentsContract.Presenter {
     @Override
     public void loadComments(int shotId, int page) {
         shotsDataSource.getShotComments(shotId, page)
+                .compose(((RxAppCompatActivity)commentsView).<List<Comment>>bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new BaseObserver<List<Comment>>(){

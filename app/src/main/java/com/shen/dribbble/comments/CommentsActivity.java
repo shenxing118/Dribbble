@@ -1,6 +1,5 @@
 package com.shen.dribbble.comments;
 
-import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -48,7 +47,6 @@ public class CommentsActivity extends BaseActivity implements CommentsContract.V
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recyclerview_act);
 
-        setStatusBarColor();
         setToolBar("Comments", true);
 
         shotId = getIntent().getIntExtra("shotId", 0);
@@ -57,7 +55,7 @@ public class CommentsActivity extends BaseActivity implements CommentsContract.V
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        commentsAdapter = new CommentsAdapter(this, new ArrayList<Comment>(0), R.layout.comment_item,commentsPresenter);
+        commentsAdapter = new CommentsAdapter(new ArrayList<Comment>(0), commentsPresenter);
 
         View footerView = LayoutInflater.from(this).inflate(R.layout.load_more_footer, recyclerView, false);
         commentsAdapter.setFooterView(footerView);
@@ -121,8 +119,8 @@ public class CommentsActivity extends BaseActivity implements CommentsContract.V
 
     private static class CommentsAdapter extends BaseRecyclerViewAdapter<Comment> {
 
-        public CommentsAdapter(Context context, List<Comment> mDatas, int resourceId, BasePresenter presenter) {
-            super(context, mDatas, resourceId, presenter);
+        public CommentsAdapter(List<Comment> mDatas, BasePresenter presenter) {
+            super(mDatas, R.layout.comment_item, presenter);
         }
 
         @Override

@@ -1,6 +1,5 @@
 package com.shen.dribbble.shots;
 
-import android.content.Context;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
@@ -45,12 +44,11 @@ public class ShotsActivity extends BaseActivity implements ShotsContract.View {
 
         shotsPresenter = new ShotsPresenter(ShotsRemoteDataSource.getInstance(), this);
 
-        setStatusBarColor();
         setToolBar("Dribbble", false);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.shots_list);
 
-        shotsAdapter = new ShotsAdapter(this, new ArrayList<Shot>(0), R.layout.shot_item, shotsPresenter);
+        shotsAdapter = new ShotsAdapter(new ArrayList<Shot>(0), shotsPresenter);
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
         layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
@@ -93,6 +91,8 @@ public class ShotsActivity extends BaseActivity implements ShotsContract.View {
         });
 
         getShots();
+
+
     }
 
     private void getShots() {
@@ -126,8 +126,8 @@ public class ShotsActivity extends BaseActivity implements ShotsContract.View {
     public static class ShotsAdapter extends BaseRecyclerViewAdapter<Shot> {
 
 
-        public ShotsAdapter(Context context, List<Shot> mDatas, int resourceId, BasePresenter presenter) {
-            super(context, mDatas, resourceId, presenter);
+        public ShotsAdapter(List<Shot> mDatas, BasePresenter presenter) {
+            super(mDatas, R.layout.shot_item, presenter);
         }
 
         @Override
@@ -144,7 +144,7 @@ public class ShotsActivity extends BaseActivity implements ShotsContract.View {
 
     public static class SpaceItemDecoration extends RecyclerView.ItemDecoration {
 
-        private int space;
+        private final int space;
 
         public SpaceItemDecoration(int space) {
             this.space = space;

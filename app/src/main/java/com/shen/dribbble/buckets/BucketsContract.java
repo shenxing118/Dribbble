@@ -3,7 +3,6 @@ package com.shen.dribbble.buckets;
 import com.shen.dribbble.BasePresenter;
 import com.shen.dribbble.BaseView;
 import com.shen.dribbble.data.Bucket;
-import com.shen.dribbble.data.Comment;
 import com.shen.dribbble.data.User;
 
 import java.util.List;
@@ -18,14 +17,14 @@ public interface BucketsContract {
 
         void onAvatarClick(android.view.View view, User user);
 
-        void onBucketItemClick(android.view.View view, Bucket bucket);
+        void onBucketItemClick(Bucket bucket);
     }
 
-    interface View extends BaseView<Presenter>{
+    interface View extends BaseView {
         void showBuckets(List<Bucket> buckets);
 
         void showUser(android.view.View view, User user);
 
-        void showBucketDetail(android.view.View view,Bucket bucket);
+        void showBucketDetail(Bucket bucket);
     }
 }

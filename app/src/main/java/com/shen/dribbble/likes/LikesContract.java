@@ -18,7 +18,7 @@ public interface LikesContract {
         void onItemClick(android.view.View view, User user);
     }
 
-    interface View extends BaseView<Presenter> {
+    interface View extends BaseView {
         void showLikes(List<Like> likes);
 
         void showUser(android.view.View view, User user);

@@ -3,7 +3,6 @@ package com.shen.dribbble.comments;
 import com.shen.dribbble.BasePresenter;
 import com.shen.dribbble.BaseView;
 import com.shen.dribbble.data.Comment;
-import com.shen.dribbble.data.Like;
 import com.shen.dribbble.data.User;
 
 import java.util.List;
@@ -19,7 +18,7 @@ public interface CommentsContract {
         void onAvatarClick(android.view.View view , User user);
     }
 
-    interface View extends BaseView<Presenter>{
+    interface View extends BaseView {
         void showComments(List<Comment> comments);
 
         void showUser(android.view.View view,User user);
